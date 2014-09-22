@@ -62,7 +62,7 @@ Showdown.converter = function () {
 		g_urls = [];
 		g_titles = [];
 		g_html_blocks = [];
-
+		
 		// attacklab: Replace ~ with ~T
 		// This lets us use tilde as an escape char to avoid md5 hashes
 		// The choice of character is arbitray; anything that isn't
@@ -131,7 +131,6 @@ Showdown.converter = function () {
 			return "<a href='mailto:" + wholeMatch + "'>" + wholeMatch + "</a>";
 		});
 
-
 		return text;
 	};
 	
@@ -199,7 +198,7 @@ Showdown.converter = function () {
 		// * Requires exactly 3 underscores on the right-hand side of the equals sign.
 		// * Currently does not check whether a <form> tag has been opened.
 		// 
-		return text.replace(/(\w[\w \t\-]*(\*)?)[ \t]*=[ \t]*___(\[\d+\])?/g, function(wholeMatch, lhs, required, size) {
+		return text.replace(/([亜-熙ぁ-んァ-ヶa-zA-Z0-9][亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]*(\*)?)[ \t]*=[ \t]*___(\[\d+\])?/g, function(wholeMatch, lhs, required, size) {
 			var cleaned = lhs.replace(/\*/g, '').trim().replace(/\t/g, ' ').toLowerCase();
 			var inputName = cleaned.replace(/[ \t]/g, '-'); // convert spaces to hyphens
 			var labelName = cleaned.split(' ').map(capitalize).join(' ') + (required ? '*:' : ':');
@@ -231,13 +230,13 @@ Showdown.converter = function () {
 		// 
 		// TODO: Make this work across multiple lines.
 		//
-		var regex = /(\w[\w \t\-]*)=[ \t]*(\(x?\)[ \t]*[\w \t\-]+[\(\)\w \t\-]*)/g;
+		var regex = /([亜-熙ぁ-んァ-ヶa-zA-Z0-9][亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]*)=[ \t]*(\(x?\)[ \t]*[亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]+[\(\)亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]*)/g;
 		return text.replace(regex, function(whole, name, options) {
 			var cleanedName = name.trim().replace(/\t/g, ' ');
 			var inputName = cleanedName.replace(/[ \t]/g, '_').toLowerCase();
 			var cleanedOptions = options.trim().replace(/\t/g, ' ');
 			var labelName = cleanedName + ":";
-			var output = '<label>' + labelName + '</label>';
+			var output = '<label>' + labelName + '</label><br>';
 			var optRegex = /\((x?)\)[ \t]*([a-zA-Z0-9 \t_\-]+)/g;
 			var match = optRegex.exec(cleanedOptions);
 			while (match) {
@@ -274,14 +273,14 @@ Showdown.converter = function () {
 		// 
 		// TODO: Make this work across multiple lines.
 		//
-		var regex = /(\w[\w \t\-]*)=[ \t]*(\[x?\][ \t]*[\w \t\-]+[\[\]\w \t\-]*)/g;
+		var regex = /([亜-熙ぁ-んァ-ヶa-zA-Z0-9][亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]*)=[ \t]*(\[x?\][ \t]*[亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]+[\[\]亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]*)/g;
 		return text.replace(regex, function(whole, name, options) {
 			var cleanedName = name.trim().replace(/\t/g, ' ');
 			var inputName = cleanedName.replace(/[ \t]/g, '_').toLowerCase();
 			var cleanedOptions = options.trim().replace(/\t/g, ' ');
 			var labelName = cleanedName + ":";
-			var output = '<label>' + labelName + '</label>';
-			var optRegex = /\[(x?)\][ \t]*([\w \t\-]+)/g;
+			var output = '<label>' + labelName + '</label><br>';
+			var optRegex = /\[(x?)\][ \t]*([亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t\-]+)/g;
 			var match = optRegex.exec(cleanedOptions);
 			while (match) {
 				var id = match[2].trim().replace(/\t/g, ' ').replace(/[ \t]/g, '_').toLowerCase();
@@ -322,7 +321,7 @@ Showdown.converter = function () {
 		// Any spaces on the left-hand side of the equal-sign will be converted into underscores
 		// to use as the id and name fields for the label and select tags.
 		//
-		var regex = /(\w[\w \t_\-]*)=[ \t]*\{([a-zA-Z0-9 \t\->_,\(\)]+)\}/g;
+		var regex = /([亜-熙ぁ-んァ-ヶa-zA-Z0-9][亜-熙ぁ-んァ-ヶa-zA-Z0-9 \t_\-]*)=[ \t]*\{([a-zA-Z0-9 \t\->_,\(\)]+)\}/g;
 		return text.replace(regex, function(whole, name, options) {
 			var cleanedName = name.trim().replace(/\t/g, ' ');
 			var id = cleanedName.replace(/[ \t]/g, '_').toLowerCase();
@@ -1211,14 +1210,14 @@ Showdown.converter = function () {
 
 		if (true) { //eventually this will be replaced with a runtime option. But for now we're forcing it.
 			text = text.replace(/(\*\*)(?=\S)([^\r]*?\S[*]*)\1/g, "<strong>$2</strong>");
-			text = text.replace(/(\w)_(\w)/g, "$1~E95E$2"); // ** GFM **  "~E95E" == escaped "_"
+			text = text.replace(/([亜-熙ぁ-んァ-ヶa-zA-Z0-9])_([亜-熙ぁ-んァ-ヶa-zA-Z0-9])/g, "$1~E95E$2"); // ** GFM **  "~E95E" == escaped "_"
 			text = text.replace(/(\*)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>");
 			text = text.replace(/(_)(?=\S)([^\r]*?\S)\1/g, "<u>$2</u>");
 		} else {
 			// <strong> must go first:
 			text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g, "<strong>$2</strong>");
 
-			text = text.replace(/(\w)_(\w)/g, "$1~E95E$2"); // ** GFM **  "~E95E" == escaped "_"
+			text = text.replace(/([亜-熙ぁ-んァ-ヶa-zA-Z0-9])_([亜-熙ぁ-んァ-ヶa-zA-Z0-9])/g, "$1~E95E$2"); // ** GFM **  "~E95E" == escaped "_"
 			text = text.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>");
 		}
 
@@ -1335,7 +1334,7 @@ Showdown.converter = function () {
 		// Smart processing for ampersands and angle brackets that need to be encoded.
 		// Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
 		//   http://bumppo.net/projects/amputator/
-		text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g, "&amp;");
+		text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|[亜-熙ぁ-んァ-ヶa-zA-Z0-9]+);)/g, "&amp;");
 
 		// Encode naked <'s
 		text = text.replace(/<(?![a-z\/?\$!])/gi, "&lt;");
@@ -1404,14 +1403,14 @@ Showdown.converter = function () {
 			<
 			(?:mailto:)?
 			(
-				[-.\w]+
+				[-.亜-熙ぁ-んァ-ヶa-zA-Z0-9]+
 				\@
 				[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+
 			)
 			>
 		/gi, _DoAutoLinks_callback());
 	*/
-		text = text.replace(/<(?:mailto:)?([\-.\w]+\@[\-a-z0-9]+(\.[\-a-z0-9]+)*\.[a-z]+)>/gi, function (wholeMatch, m1) {
+		text = text.replace(/<(?:mailto:)?([\-.亜-熙ぁ-んァ-ヶa-zA-Z0-9]+\@[\-a-z0-9]+(\.[\-a-z0-9]+)*\.[a-z]+)>/gi, function (wholeMatch, m1) {
 			return _EncodeEmailAddress(_UnescapeSpecialChars(m1));
 		});
 
