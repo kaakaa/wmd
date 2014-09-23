@@ -287,7 +287,7 @@ Showdown.converter = function () {
 				var id = match[2].trim().replace(/\t/g, ' ').replace(/[ \t]/g, '_').toLowerCase();
 				var checkboxLabel = match[2].trim().replace(/\t/g, ' ');
 				var checked = match[1] == 'x';
-				output += '<input type="checkbox" name="' + inputName + '" id="' + id + 
+				output += '<input type="checkbox" name="' + inputName + '[]" id="' + id + 
 						  '" value="' + id + '" ' + (checked ? 'checked="checked"' : '') + '/>';
 				output += '<label for="' + id + '">' + checkboxLabel + '</label>';
 				match = optRegex.exec(cleanedOptions);
