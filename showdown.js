@@ -203,7 +203,7 @@ Showdown.converter = function () {
 			var inputName = cleaned.replace(/[ \t]/g, '-'); // convert spaces to hyphens
 			var labelName = cleaned.split(' ').map(capitalize).join(' ') + (required ? '*:' : ':');
 			var template = '<label for="%id%" class="%labelClass%">%label%</label>' +
-						   '<input type="text" id="%id%" name="%id%" size="%size%" class="%inputClass%"/>';
+						   '<input type="text" id="%id%" name="@text_%id%" size="%size%" class="%inputClass%"/>';
 			size = size ? size.match(/\d+/g)[0] : 20;
 			var labelClass = required ? 'required-label' : '';
 			var inputClass = required ? 'required-input' : '';
@@ -243,7 +243,7 @@ Showdown.converter = function () {
 				var id = match[2].trim().replace(/\t/g, ' ').replace(/[ \t]/g, '_').toLowerCase();
 				var checkboxLabel = match[2].trim().replace(/\t/g, ' ');
 				var checked = match[1] == 'x';
-				output += '<input type="radio" name="' + inputName + '" id="' + id + 
+				output += '<input type="radio" name="@radio_' + inputName + '" id="' + id + 
 						  '" value="' + id + '" ' + (checked ? 'checked="checked"' : '') + '/>';
 				output += '<label for="' + id + '">' + checkboxLabel + '</label>';
 				match = optRegex.exec(cleanedOptions);
@@ -287,7 +287,7 @@ Showdown.converter = function () {
 				var id = match[2].trim().replace(/\t/g, ' ').replace(/[ \t]/g, '_').toLowerCase();
 				var checkboxLabel = match[2].trim().replace(/\t/g, ' ');
 				var checked = match[1] == 'x';
-				output += '<input type="checkbox" name="' + inputName + '[]" id="' + id + 
+				output += '<input type="checkbox" name="@check_' + inputName + '[]" id="' + id + 
 						  '" value="' + id + '" ' + (checked ? 'checked="checked"' : '') + '/>';
 				output += '<label for="' + id + '">' + checkboxLabel + '</label>';
 				match = optRegex.exec(cleanedOptions);
